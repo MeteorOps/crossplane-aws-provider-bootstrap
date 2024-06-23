@@ -39,20 +39,6 @@ spec:
 
 ---
 
-apiVersion: aws.crossplane.io/v1beta1
-kind: ProviderConfig
-metadata:
-  name: aws-provider
-spec:
-  credentials:
-    source: Secret
-    secretRef:
-      namespace: crossplane-system
-      name: aws-credentials
-      key: creds
-
----
-
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:

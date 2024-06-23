@@ -12,7 +12,15 @@ Insert your AWS credentials to the creds file and run the following from the sam
 
 Install aws provider bootstrap:
 
-`kubectl apply -f crossplane-provider-bootstrap.yaml --wait`
+`kubectl apply -f crossplane-provider-bootstrap.yaml`
+
+Wait for provider to be ready:
+
+`kubectl get provider`
+
+Install aws provider config:
+
+`kubectl apply -f crossplane-provider-conf.yaml`
 
 Create a bucket:
 
