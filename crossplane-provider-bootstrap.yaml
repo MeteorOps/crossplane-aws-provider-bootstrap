@@ -1,0 +1,231 @@
+---
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: crossplane-provider-aws
+  namespace: crossplane-system
+
+---
+
+apiVersion: pkg.crossplane.io/v1beta1
+kind: DeploymentRuntimeConfig
+metadata:
+  name: aws-config
+spec:
+  deploymentTemplate:
+    spec:
+      selector: {}
+      template:
+        spec:
+          serviceAccount: crossplane-provider-aws
+          serviceAccountName: crossplane-provider-aws
+          containers:
+            - name: package-runtime
+  serviceAccountTemplate:
+    metadata:
+      name: crossplane-provider-aws
+
+---
+
+apiVersion: pkg.crossplane.io/v1
+kind: Provider
+metadata:
+  name: provider-aws
+spec:
+  package: xpkg.upbound.io/crossplane-contrib/provider-aws:v0.39.0
+  runtimeConfigRef:
+    name: aws-config
+
+---
+
+apiVersion: aws.crossplane.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: aws-provider
+spec:
+  credentials:
+    source: Secret
+    secretRef:
+      namespace: crossplane-system
+      name: aws-credentials
+      key: creds
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: crossplane-full-access
+rules:
+  - apiGroups:
+      - ec2.aws.crossplane.io
+      - kafka.aws.crossplane.io
+      - autoscaling.aws.crossplane.io
+      - s3.aws.crossplane.io
+      - rds.aws.crossplane.io
+      - dynamodb.aws.crossplane.io
+      - dax.aws.crossplane.io
+      - iam.aws.crossplane.io
+      - sqs.aws.crossplane.io
+      - sns.aws.crossplane.io
+      - redshift.aws.crossplane.io
+      - elasticloadbalancing.aws.crossplane.io
+      - cognitoidentityprovider.aws.crossplane.io
+      - ecr.aws.crossplane.io
+      - kms.aws.crossplane.io
+      - eks.aws.crossplane.io
+      - acm.aws.crossplane.io
+      - ecs.aws.crossplane.io
+      - elasticache.aws.crossplane.io
+      - cognitoidentity.aws.crossplane.io
+      - cache.aws.crossplane.io
+      - kinesis.aws.crossplane.io
+      - ram.aws.crossplane.io
+      - route53.aws.crossplane.io
+      - mq.aws.crossplane.io
+      - prometheusservice.aws.crossplane.io
+      - neptune.aws.crossplane.io
+      - route53resolver.aws.crossplane.io
+      - secretsmanager.aws.crossplane.io
+      - apigatewayv2.aws.crossplane.io
+      - elbv2.aws.crossplane.io
+      - iot.aws.crossplane.io
+      - apigateway.aws.crossplane.io
+      - efs.aws.crossplane.io
+      - sfn.aws.crossplane.io
+      - batch.aws.crossplane.io
+      - cloudfront.aws.crossplane.io
+      - emrcontainers.aws.crossplane.io
+      - glue.aws.crossplane.io
+      - acmpca.aws.crossplane.io
+      - opensearchservice.aws.crossplane.io
+      - transfer.aws.crossplane.io
+      - mwaa.aws.crossplane.io
+      - lambda.aws.crossplane.io
+      - athena.aws.crossplane.io
+      - cloudwatchlogs.aws.crossplane.io
+      - servicediscovery.aws.crossplane.io
+      - cloudsearch.aws.crossplane.io
+      - docdb.aws.crossplane.io
+      - database.aws.crossplane.io
+      - aws.crossplane.io
+      - aws.example.org
+      - aws.crossplane.io
+      - aws.example.org
+    resources: [ "*" ]
+    verbs: [ "*" ]
+  - apiGroups:
+      - ""
+    resources:
+      - events
+    verbs:
+      - create
+      - update
+      - patch
+      - delete
+  - apiGroups:
+      - apiextensions.k8s.io
+    resources:
+      - customresourcedefinitions
+      - customresourcedefinitions/status
+    verbs:
+      - "*"
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+      - delete
+  - apiGroups:
+      - ""
+    resources:
+      - serviceaccounts
+      - services
+    verbs:
+      - "*"
+  - apiGroups:
+      - apiextensions.crossplane.io
+      - pkg.crossplane.io
+      - secrets.crossplane.io
+    resources:
+      - "*"
+    verbs:
+      - "*"
+  - apiGroups:
+      - extensions
+      - apps
+    resources:
+      - deployments
+    verbs:
+      - get
+      - list
+      - create
+      - update
+      - patch
+      - delete
+      - watch
+  - apiGroups:
+      - ""
+      - coordination.k8s.io
+    resources:
+      - configmaps
+      - leases
+    verbs:
+      - get
+      - list
+      - create
+      - update
+      - patch
+      - watch
+      - delete
+  - apiGroups:
+      - admissionregistration.k8s.io
+    resources:
+      - validatingwebhookconfigurations
+      - mutatingwebhookconfigurations
+    verbs:
+      - get
+      - list
+      - create
+      - update
+      - patch
+      - watch
+      - delete
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: crossplane-full-access-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: crossplane-full-access
+subjects:
+  - kind: ServiceAccount
+    name: crossplane-provider-aws
+    namespace: crossplane-system
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: crossplane-full-access-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: crossplane-full-access
+subjects:
+  - kind: ServiceAccount
+    name: crossplane
+    namespace: crossplane-system
+
+---
