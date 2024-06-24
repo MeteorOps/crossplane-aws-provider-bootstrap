@@ -33,3 +33,11 @@ Check that bucket is created:
 Clean, delete the bucket:
 
 `kubectl delete -f bucket-example.yaml`
+
+### Useful Debugging Commands
+
+`kubectl get provider`
+
+`kubectl logs -n crossplane-system deploy/crossplane -c crossplane`
+
+`kubectl logs -n crossplane-system -l pkg.crossplane.io/provider=provider-aws`
