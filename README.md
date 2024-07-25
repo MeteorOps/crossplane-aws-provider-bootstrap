@@ -66,17 +66,18 @@ Clean, delete the bucket:
 
 Insert your AWS credentials to the creds file and run the following from the same folder:
 
-`kubectl create secret generic aws-creds \
+```bash
+kubectl create secret generic aws-creds \
 --from-literal=aws_access_key_id=$(grep -i aws_access_key_id creds | awk -F' = ' '{print $2}') \
---from-literal=aws_secret_access_key=$(grep -i aws_secret_access_key creds | awk -F' = ' '{print $2}')`
-
+--from-literal=aws_secret_access_key=$(grep -i aws_secret_access_key creds | awk -F' = ' '{print $2}')
+```
 Install k8s provider bootstrap:
 
 `kubectl apply -f k8s-provider-bootstrap.yaml`
 
-Wait for provider to be ready:
+Wait for k8s provider to be ready:
 
-`kubectl get provider`
+`kubectl get providers`
 
 Install k8s provider config:
 
