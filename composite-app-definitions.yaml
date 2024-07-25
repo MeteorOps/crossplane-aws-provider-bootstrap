@@ -1,0 +1,145 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: composites3buckets.aws.example.org
+spec:
+  group: aws.example.org
+  names:
+    kind: CompositeS3Bucket
+    plural: composites3buckets
+  claimNames:
+    kind: S3Bucket
+    plural: s3buckets
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                bucketName:
+                  type: string
+                bucketRegion:
+                  type: string
+
+---
+
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: compositek8sapplications.aws.example.org
+spec:
+  group: aws.example.org
+  names:
+    kind: CompositeK8sApplication
+    plural: compositek8sapplications
+  claimNames:
+    kind: K8sApplication
+    plural: k8sapplications
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                bucketName:
+                  type: string
+                bucketRegion:
+                  type: string
+            status:
+              type: object
+              properties:
+                arn:
+                  type: string
+
+
+
+---
+
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: s3bucket-with-app
+spec:
+  compositeTypeRef:
+    apiVersion: aws.example.org/v1alpha1
+    kind: CompositeK8sApplication
+  resources:
+    - name: s3bucket
+      base:
+        apiVersion: s3.aws.crossplane.io/v1beta1
+        kind: Bucket
+        spec:
+          forProvider:
+            objectOwnership: BucketOwnerEnforced
+          providerRef:
+            name: ""
+          providerConfigRef:
+            name: aws-provider
+      patches:
+        - fromFieldPath: "spec.bucketName"
+          toFieldPath: "spec.providerRef.name"
+        - fromFieldPath: "spec.bucketRegion"
+          toFieldPath: "spec.forProvider.locationConstraint"
+    - name: awscli
+      base:
+        apiVersion: kubernetes.crossplane.io/v1alpha2
+        kind: Object
+        spec:
+          forProvider:
+            manifest:
+              apiVersion: apps/v1
+              kind: Deployment
+              metadata:
+                namespace: default
+              spec:
+                replicas: 1
+                selector:
+                  matchLabels:
+                    app: awscli
+                template:
+                  metadata:
+                    labels:
+                      app: awscli
+                  spec:
+                    containers:
+                      - name: awscli
+                        image: amazon/aws-cli
+                        command: [ "sh", "-c" ]
+                        args:
+                          - |
+                            while true; do
+                              aws s3 ls --region ${BUCKET_REGION} | grep ${BUCKET_NAME};
+                              sleep 60;
+                            done
+                        env:
+                          - name: BUCKET_NAME
+                            value: ""
+                          - name: BUCKET_REGION
+                            value: ""
+                          - name: AWS_ACCESS_KEY_ID
+                            valueFrom:
+                              secretKeyRef:
+                                name: aws-creds
+                                key: aws_access_key_id
+                          - name: AWS_SECRET_ACCESS_KEY
+                            valueFrom:
+                              secretKeyRef:
+                                name: aws-creds
+                                key: aws_secret_access_key
+      patches:
+        - fromFieldPath: "spec.resourceRefs[0].name"
+          toFieldPath: "spec.forProvider.manifest.spec.template.spec.containers[0].env[0].value"
+          policy:
+            fromFieldPath: "Required"
+        - fromFieldPath: "spec.bucketRegion"
+          toFieldPath: "spec.forProvider.manifest.spec.template.spec.containers[0].env[1].value"
