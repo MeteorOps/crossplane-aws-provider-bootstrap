@@ -87,6 +87,10 @@ Apply composite app definitions:
 
 `kubectl apply -f composite-app-definitions.yaml`
 
+Apply composite app crd:
+
+`kubectl apply -f composite-app-crd.yaml`
+
 Create a composite app:
 
 `kubectl apply -f composite-app-example.yaml`
