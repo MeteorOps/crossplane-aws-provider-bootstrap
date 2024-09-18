@@ -1,10 +1,15 @@
 # crossplane-aws-provider-bootstrap
 
-Install crossplane:
+Step-by-step guide and files to deploy Crossplane on AWS EKS and start using it to deploy AWS resources.  
+This repository is used by the ["Deploy AWS Resources using Crossplane on Kubernetes"](https://www.meteorops.com/blog/deploy-aws-resources-using-crossplane-on-kubernetes) blog post.
+
+### Deploy Crossplane
 
 `helm repo add crossplane-stable https://charts.crossplane.io/stable`
 
 `helm install crossplane crossplane-stable/crossplane --namespace crossplane-system --create-namespace`
+
+### Deploy the AWS Provider
 
 Insert your AWS credentials to the creds file and run the following from the same folder:
 
@@ -29,6 +34,8 @@ Apply composite bucket definitions:
 Apply composite bucket crd:
 
 `kubectl apply -f bucket-crd.yaml`
+
+### Create an AWS Resource using Crossplane (S3 Bucket Example)
 
 Create a bucket:
 
