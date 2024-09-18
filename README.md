@@ -1,6 +1,6 @@
 # crossplane-aws-provider-bootstrap
 
-Install crossplane:
+### Deploy Crossplane
 
 `helm repo add crossplane-stable https://charts.crossplane.io/stable`
 
