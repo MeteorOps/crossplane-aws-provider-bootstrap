@@ -1,6 +1,6 @@
 # crossplane-aws-provider-bootstrap
 
-Step-by-step guide and files to deploy Crossplane on AWS EKS and start using it to deploy AWS resources.
+Step-by-step guide and files to deploy Crossplane on AWS EKS and start using it to deploy AWS resources.  
 This repository is used by the ["Deploy AWS Resources using Crossplane on Kubernetes"](https://www.meteorops.com/blog/deploy-aws-resources-using-crossplane-on-kubernetes) blog post.
 
 ### Deploy Crossplane
