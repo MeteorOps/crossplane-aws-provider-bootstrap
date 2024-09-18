@@ -46,7 +46,7 @@ spec:
                   spec:
                     containers:
                       - name: awscli
-                        image: amazon/aws-cli
+                        image: amazon/aws-cli:2.16.12
                         command: [ "sh", "-c" ]
                         args:
                           - |

@@ -1,0 +1,27 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: mycomposites3buckets.aws.example.org
+spec:
+  group: aws.example.org
+  names:
+    kind: mycompositeS3bucket
+    plural: mycomposites3buckets
+  claimNames:
+    kind: mys3bucket
+    plural: mys3buckets
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                bucketName:
+                  type: string
+                bucketRegion:
+                  type: string

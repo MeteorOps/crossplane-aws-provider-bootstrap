@@ -1,0 +1,25 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: mys3bucket
+spec:
+  compositeTypeRef:
+    apiVersion: aws.example.org/v1alpha1
+    kind: mycompositeS3bucket
+  resources:
+    - name: mys3bucket
+      base:
+        apiVersion: s3.aws.crossplane.io/v1beta1
+        kind: Bucket
+        spec:
+          forProvider:
+            objectOwnership: BucketOwnerEnforced
+          providerRef:
+            name: ""
+          providerConfigRef:
+            name: aws-provider
+      patches:
+        - fromFieldPath: "spec.bucketName"
+          toFieldPath: "spec.providerRef.name"
+        - fromFieldPath: "spec.bucketRegion"
+          toFieldPath: "spec.forProvider.locationConstraint"

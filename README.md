@@ -21,10 +21,17 @@ If used kind delete the cluster in the end:
 ## Article #1
 
 Install crossplane:
+=======
+Step-by-step guide and files to deploy Crossplane on AWS EKS and start using it to deploy AWS resources.  
+This repository is used by the ["Deploy AWS Resources using Crossplane on Kubernetes"](https://www.meteorops.com/blog/deploy-aws-resources-using-crossplane-on-kubernetes) blog post.
+
+### Deploy Crossplane
 
 `helm repo add crossplane-stable https://charts.crossplane.io/stable`
 
 `helm install crossplane crossplane-stable/crossplane --namespace crossplane-system --create-namespace`
+
+### Deploy the AWS Provider
 
 Insert your AWS credentials to the creds file and run the following from the same folder:
 
@@ -42,11 +49,25 @@ Install aws provider config:
 
 `kubectl apply -f crossplane-provider-conf.yaml`
 
+Apply composite bucket definitions:
+
+`kubectl apply -f bucket-definitions.yaml`
+
+Apply composite bucket crd:
+
+`kubectl apply -f bucket-crd.yaml`
+
+### Create an AWS Resource using Crossplane (S3 Bucket Example)
+
 Create a bucket:
 
 `kubectl apply -f bucket-example.yaml`
 
 Check that bucket is created:
+
+`kubectl get mys3bucket`
+
+or
 
 `kubectl get bucket`
 

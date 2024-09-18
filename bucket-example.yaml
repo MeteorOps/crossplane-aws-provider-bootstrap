@@ -1,24 +1,7 @@
-apiVersion: s3.aws.crossplane.io/v1beta1
-kind: Bucket
+apiVersion: aws.example.org/v1alpha1
+kind: mys3bucket
 metadata:
   name: my-crossplane-s3-bucket
 spec:
-  deletionPolicy: Delete
-  forProvider:
-    locationConstraint: us-east-2
-    objectOwnership: BucketOwnerEnforced
-    paymentConfiguration:
-      payer: BucketOwner
-    publicAccessBlockConfiguration:
-      blockPublicAcls: true
-      blockPublicPolicy: true
-      ignorePublicAcls: true
-      restrictPublicBuckets: true
-    serverSideEncryptionConfiguration:
-      rules:
-        - applyServerSideEncryptionByDefault:
-            sseAlgorithm: AES256
-  providerConfigRef:
-    name: aws-provider
-  providerRef:
-    name: my-crossplane-s3-bucket
+  bucketName: my-crossplane-s3-bucket
+  bucketRegion: us-east-2
