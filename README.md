@@ -6,6 +6,8 @@
 
 `helm install crossplane crossplane-stable/crossplane --namespace crossplane-system --create-namespace`
 
+### Deploy the AWS Provider
+
 Insert your AWS credentials to the creds file and run the following from the same folder:
 
 `kubectl create secret generic aws-credentials -n crossplane-system --from-file=creds=./creds`
@@ -21,6 +23,8 @@ Wait for provider to be ready:
 Install aws provider config:
 
 `kubectl apply -f crossplane-provider-conf.yaml`
+
+### Create an AWS Resource using Crossplane (S3 Bucket Example)
 
 Create a bucket:
 
