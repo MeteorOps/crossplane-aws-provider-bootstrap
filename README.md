@@ -22,11 +22,23 @@ Install aws provider config:
 
 `kubectl apply -f crossplane-provider-conf.yaml`
 
+Apply composite bucket definitions:
+
+`kubectl apply -f bucket-definitions.yaml`
+
+Apply composite bucket crd:
+
+`kubectl apply -f bucket-crd.yaml`
+
 Create a bucket:
 
 `kubectl apply -f bucket-example.yaml`
 
 Check that bucket is created:
+
+`kubectl get mys3bucket`
+
+or
 
 `kubectl get bucket`
 
