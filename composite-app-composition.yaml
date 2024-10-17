@@ -56,9 +56,9 @@ spec:
                             done
                         env:
                           - name: BUCKET_NAME
-                            value: ""
+                            value: "" # NOTE: overriden by the patches section of the manifest
                           - name: BUCKET_REGION
-                            value: ""
+                            value: "" # NOTE: overriden by the patches section of the manifest
                           - name: AWS_ACCESS_KEY_ID
                             valueFrom:
                               secretKeyRef:

@@ -85,14 +85,16 @@ Clean, delete the bucket:
 
 ## Article #2
 
-Insert your AWS credentials to the creds file and run the following from the same folder:
+For the Crossplane Kubernetes Provider, insert your AWS credentials to the creds file and run the following from the same folder:
 
 ```bash
 kubectl create secret generic aws-creds \
 --from-literal=aws_access_key_id=$(grep -i aws_access_key_id creds | awk -F' = ' '{print $2}') \
 --from-literal=aws_secret_access_key=$(grep -i aws_secret_access_key creds | awk -F' = ' '{print $2}')
 ```
-Install k8s provider bootstrap:
+### Install the k8s-provider-bootstrap file
+It deploys the following resources to setup the Crossplane Kubernetes Provider: ServiceAccount, Provider (Crossplane), ClusterRole, ClusterRoleBinding.
+Note that it could also be a Helm Provider if you want to use Helm instead of direct Kubernetes resources for the application part.
 
 `kubectl apply -f k8s-provider-bootstrap.yaml`
 
@@ -100,17 +102,17 @@ Wait for k8s provider to be ready:
 
 `kubectl get providers`
 
-Install k8s provider config:
+Install k8s provider config (points to the cluster on which the Provider is deployed, but could be pointed at other clusters as well):
 
 `kubectl apply -f k8s-provider-conf.yaml`
 
 Apply composite app definitions:
 
-`kubectl apply -f composite-app-definitions.yaml`
+`kubectl apply -f composite-app-xrds.yaml`
 
 Apply composite app crd:
 
-`kubectl apply -f composite-app-crd.yaml`
+`kubectl apply -f composite-app-composition.yaml`
 
 Create a composite app:
 
