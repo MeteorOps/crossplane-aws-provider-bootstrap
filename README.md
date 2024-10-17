@@ -122,6 +122,10 @@ Check that composite app is created:
 
 `kubectl get K8sApplication`
 
+Check in the logs composite app is can list the bucket that was created:
+
+`kubectl logs -l app=awscli`
+
 Clean, delete the composite app:
 
 `kubectl delete -f composite-app-example.yaml`
