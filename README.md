@@ -108,7 +108,7 @@ Install k8s provider config (points to the cluster on which the Provider is depl
 
 Apply composite app definitions:
 
-`kubectl apply -f composite-app-xrds.yaml`
+`kubectl apply -f composite-app-xrd.yaml`
 
 Apply composite app crd:
 
