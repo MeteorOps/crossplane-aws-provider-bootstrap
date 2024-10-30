@@ -1,7 +1,7 @@
 apiVersion: aws.example.org/v1alpha1
 kind: mys3bucket
 metadata:
-  name: my-crossplane-s3-bucket
+  name: mike-bucket-hevanta
 spec:
-  bucketName: my-crossplane-s3-bucket
+  bucketName: mike-bucket-hevanta
   bucketRegion: us-east-2

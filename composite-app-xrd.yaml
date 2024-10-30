@@ -1,0 +1,32 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: compositek8sapplications.aws.example.org
+spec:
+  group: aws.example.org
+  names:
+    kind: CompositeK8sApplication
+    plural: compositek8sapplications
+  claimNames:
+    kind: K8sApplication
+    plural: k8sapplications
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                bucketName:
+                  type: string
+                bucketRegion:
+                  type: string
+            status:
+              type: object
+              properties:
+                arn:
+                  type: string

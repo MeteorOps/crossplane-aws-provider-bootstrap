@@ -1,0 +1,7 @@
+apiVersion: aws.example.org/v1alpha1
+kind: K8sApplication
+metadata:
+  name: my-app-bucket
+spec:
+  bucketName: my-app-bucket
+  bucketRegion: us-west-2
